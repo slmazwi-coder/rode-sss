@@ -42,3 +42,16 @@ jobs:
           server-dir: public_html/
           state-name: .ftp-deploy-sync-state-public.json
           dry-run: false
+
+      - name: Deploy to private_html
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
+          port: ${{ secrets.FTP_PORT || '21' }}
+          local-dir: ./dist/
+          server-dir: private_html/
+          state-name: .ftp-deploy-sync-state-private.json
+          dry-run: false
