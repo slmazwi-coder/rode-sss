@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Award, TrendingUp, Users, Bell, BookOpen, Target } from 'lucide-react'
 import Hero from '../components/Hero'
 import NewsSection from '../components/NewsSection'
+import { STREAMS } from '../lib/store'
 
 const PILLARS = [
-  { icon: Award,     title: 'Academic Excellence', desc: 'Three academic streams — General, Science, and Commerce — preparing learners for the NSC and beyond.' },
+  { icon: Award,     title: 'Academic Excellence', desc: 'Three academic streams — Science, Commerce, and Humanities — preparing learners for the NSC and beyond.' },
   { icon: Target,    title: 'Sport & Athletics',   desc: 'Competitive teams in soccer, netball, and athletics at district and regional level.' },
   { icon: BookOpen,  title: 'Arts & Culture',      desc: 'Choir, drama, debating, and spelling bee programmes that celebrate our heritage.' },
   { icon: Users,     title: 'Community Values',    desc: 'A school rooted in respect, discipline, and pride — where every learner belongs.' },
@@ -24,7 +25,7 @@ export default function Home() {
               {
                 badge: 'Admissions 2027',
                 title: 'Applications are now open',
-                body:  'Submit your admission application for the 2027 academic year. Three streams available: General, Science, and Commerce.',
+                body:  'Submit your admission application for the 2027 academic year. Three streams available: Science, Commerce, and Humanities.',
                 to:    '/admissions',
                 label: 'Apply now',
               },
@@ -87,14 +88,17 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { title: 'General Stream', subjects: 'Languages, Tourism, History, Geography, Maths Literacy, Life Orientation' },
-              { title: 'Science Stream', subjects: 'Languages, Life Orientation, Maths, Physics, Life Sciences, Geography/Agriculture' },
-              { title: 'Commerce Stream', subjects: 'Languages, Life Orientation, Accounting, Business Studies, Economics, Maths/Maths Literacy' },
-            ].map(({ title, subjects }) => (
-              <div key={title} className="card" style={{ borderTop: '4px solid #DAA520' }}>
-                <h3 className="font-display font-bold text-xl mb-3" style={{ color: '#1E3A5F' }}>{title}</h3>
-                <p className="text-sm" style={{ color: '#4b5563' }}>{subjects}</p>
+            {STREAMS.map(({ name, subjects }) => (
+              <div key={name} className="card" style={{ borderTop: '4px solid #DAA520' }}>
+                <h3 className="font-display font-bold text-xl mb-3" style={{ color: '#1E3A5F' }}>{name}</h3>
+                <ul className="space-y-1.5">
+                  {subjects.map(subject => (
+                    <li key={subject} className="text-sm flex items-start gap-2" style={{ color: '#4b5563' }}>
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#DAA520' }} />
+                      {subject}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
