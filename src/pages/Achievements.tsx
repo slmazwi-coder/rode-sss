@@ -56,6 +56,8 @@ export const Achievements = () => {
   const [activeAchieversYear, setActiveAchieversYear] = useState<string>('2025');
   const [hallOfFame, setHallOfFame] = useState<HallOfFameEntry[]>(getHallOfFame());
   const [currentResults, setCurrentResults] = useState<YearResults | null>(getResultsByYear(activeResultsYear));
+  // The detailed NSC breakdown is optional — a published pass rate alone is valid.
+  const hasDetail = !!currentResults && currentResults.wrote > 0;
 
   useEffect(() => {
     setHallOfFame(getHallOfFame());
@@ -94,38 +96,47 @@ export const Achievements = () => {
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
                   {currentResults.passRate}% Pass Rate
                 </h2>
-                <p className="text-base sm:text-lg text-gray-200 max-w-2xl mx-auto italic leading-relaxed">
-                  {currentResults.wrote} wrote · {currentResults.bachelors} Bachelor's · {currentResults.diplomas} Diplomas · {currentResults.higher} Higher Certificates
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl mx-auto">
-                  {[
-                    { label: 'Wrote', value: currentResults.wrote },
-                    { label: 'Passed', value: currentResults.wrote - (currentResults.failed || 0) },
-                    { label: 'Bachelor', value: currentResults.bachelors },
-                    { label: 'Distinctions', value: currentResults.distinctions },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="bg-white/10 rounded-2xl p-4 text-center border border-white/10">
-                      <p className="text-2xl font-black text-white">{value}</p>
-                      <p className="text-xs text-white/70 uppercase tracking-widest mt-1">{label}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 max-w-3xl mx-auto">
-                  {[
-                    { label: "Bachelor's Passes", value: currentResults.bachelors, pct: ((currentResults.bachelors / currentResults.wrote) * 100).toFixed(1) },
-                    { label: 'Diploma Passes', value: currentResults.diplomas ?? 0, pct: (((currentResults.diplomas ?? 0) / currentResults.wrote) * 100).toFixed(1) },
-                    { label: 'Higher Certificates', value: currentResults.higher ?? 0, pct: (((currentResults.higher ?? 0) / currentResults.wrote) * 100).toFixed(1) },
-                    { label: 'Failed', value: currentResults.failed ?? 0, pct: (((currentResults.failed ?? 0) / currentResults.wrote) * 100).toFixed(1) },
-                  ].map(({ label, value, pct }) => (
-                    <div key={label} className="bg-white rounded-2xl p-4 text-center border border-[#DAA520]/20">
-                      <p className="text-2xl font-black text-[#1E3A5F]">{value}</p>
-                      <p className="text-xs text-[#1E3A5F] font-bold uppercase tracking-widest mt-1">{pct}%</p>
-                      <p className="text-xs text-gray-500 mt-1">{label}</p>
-                    </div>
-                  ))}
+                  {hasDetail ? (
+                    <>
+                      <p className="text-base sm:text-lg text-gray-200 max-w-2xl mx-auto italic leading-relaxed">
+                        {currentResults.wrote} wrote · {currentResults.bachelors} Bachelor's · {currentResults.diplomas} Diplomas · {currentResults.higher} Higher Certificates
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl mx-auto">
+                        {[
+                          { label: 'Wrote', value: currentResults.wrote },
+                          { label: 'Passed', value: currentResults.wrote - (currentResults.failed || 0) },
+                          { label: 'Bachelor', value: currentResults.bachelors },
+                          { label: 'Distinctions', value: currentResults.distinctions },
+                        ].map(({ label, value }) => (
+                          <div key={label} className="bg-white/10 rounded-2xl p-4 text-center border border-white/10">
+                            <p className="text-2xl font-black text-white">{value}</p>
+                            <p className="text-xs text-white/70 uppercase tracking-widest mt-1">{label}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 max-w-3xl mx-auto">
+                        {[
+                          { label: "Bachelor's Passes", value: currentResults.bachelors, pct: ((currentResults.bachelors / currentResults.wrote) * 100).toFixed(1) },
+                          { label: 'Diploma Passes', value: currentResults.diplomas ?? 0, pct: (((currentResults.diplomas ?? 0) / currentResults.wrote) * 100).toFixed(1) },
+                          { label: 'Higher Certificates', value: currentResults.higher ?? 0, pct: (((currentResults.higher ?? 0) / currentResults.wrote) * 100).toFixed(1) },
+                          { label: 'Failed', value: currentResults.failed ?? 0, pct: (((currentResults.failed ?? 0) / currentResults.wrote) * 100).toFixed(1) },
+                        ].map(({ label, value, pct }) => (
+                          <div key={label} className="bg-white rounded-2xl p-4 text-center border border-[#DAA520]/20">
+                            <p className="text-2xl font-black text-[#1E3A5F]">{value}</p>
+                            <p className="text-xs text-[#1E3A5F] font-bold uppercase tracking-widest mt-1">{pct}%</p>
+                            <p className="text-xs text-gray-500 mt-1">{label}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-base sm:text-lg text-gray-200 max-w-2xl mx-auto italic leading-relaxed">
+                      A {currentResults.passRate}% National Senior Certificate pass rate for the Class of {activeResultsYear}.
+                      The full subject and candidate breakdown will be published once released by the school.
+                    </p>
+                  )}
                 </div>
               </div>
-            </div>
           ) : (
             <div className="bg-[#1E3A5F] border-2 border-[#DAA520] rounded-3xl p-6 sm:p-8 md:p-12 relative overflow-hidden shadow-xl">
               <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
@@ -173,9 +184,11 @@ export const Achievements = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { icon: TrendingUp, label: 'Pass Rate', value: `${currentResults.passRate}%` },
-                { icon: Medal, label: 'Bachelor Passes', value: String(currentResults.bachelors) },
-                { icon: Star, label: 'Distinctions', value: String(currentResults.distinctions) },
-                { icon: BarChart3, label: 'Candidates', value: String(currentResults.wrote) },
+                ...(hasDetail ? [
+                  { icon: Medal, label: 'Bachelor Passes', value: String(currentResults.bachelors) },
+                  { icon: Star, label: 'Distinctions', value: String(currentResults.distinctions) },
+                  { icon: BarChart3, label: 'Candidates', value: String(currentResults.wrote) },
+                ] : []),
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
                   <Icon size={28} className="mx-auto mb-3 text-[#DAA520]" />

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
-import { getContact } from '../lib/store';
+import { Phone, Mail, MapPin, Clock, Send, Hash, Building2 } from 'lucide-react';
+import { getContact, SCHOOL, STAFF } from '../lib/store';
 
 interface ContactInfo {
   address: string;
+  postal: string;
   phone: string;
   email: string;
+  emis?: string;
   monThu: string;
   friday: string;
 }
@@ -32,8 +34,17 @@ export const Contact = () => {
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Address</h3>
+                  <h3 className="font-bold text-gray-900">Physical Address</h3>
                   <p className="text-gray-600">{info.address}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-[#EBF5FF] text-[#DAA520] rounded-xl">
+                  <Building2 size={24} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900">Postal Address</h3>
+                  <p className="text-gray-600">{info.postal}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -41,7 +52,7 @@ export const Contact = () => {
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Phone</h3>
+                  <h3 className="font-bold text-gray-900">Telephone</h3>
                   <p className="text-gray-600">{info.phone}</p>
                 </div>
               </div>
@@ -56,6 +67,15 @@ export const Contact = () => {
               </div>
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-[#EBF5FF] text-[#DAA520] rounded-xl">
+                  <Hash size={24} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900">EMIS Number</h3>
+                  <p className="text-gray-600">{info.emis || SCHOOL.emis}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-[#EBF5FF] text-[#DAA520] rounded-xl">
                   <Clock size={24} />
                 </div>
                 <div>
@@ -63,6 +83,27 @@ export const Contact = () => {
                   <p className="text-gray-600">Monday - Thursday: {info.monThu}</p>
                   <p className="text-gray-600">Friday: {info.friday}</p>
                 </div>
+              </div>
+            </div>
+
+            {/* Leadership contacts */}
+            <div className="mt-10">
+              <h2 className="text-2xl font-bold text-[#1E3A5F] mb-6">School Management</h2>
+              <div className="space-y-3">
+                {STAFF.leadership.map(({ name, role, cell }) => (
+                  <div
+                    key={role}
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 rounded-xl border border-gray-100 bg-gray-50 px-5 py-4"
+                  >
+                    <div>
+                      <p className="font-bold text-gray-900">{name}</p>
+                      <p className="text-sm text-gray-500">{role}</p>
+                    </div>
+                    <a href={`tel:${cell.replace(/\s/g, '')}`} className="text-sm font-semibold text-[#1E3A5F]">
+                      {cell}
+                    </a>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 
 const SLIDES = [
   { caption: 'Rise and Shine',             sub: 'Where Dreams Take Flight' },
-  { caption: 'Three Streams of Excellence',     sub: 'General · Science · Commerce' },
+  { caption: 'Three Streams of Excellence',     sub: 'Science · Commerce · Humanities' },
   { caption: 'Building Tomorrow\'s Leaders',    sub: 'Grade 8 to Grade 12' },
   { caption: 'Our Learners, Our Pride',         sub: 'Every learner has a unique story' },
   { caption: 'Admissions 2027 Open',            sub: 'Apply now for next year' },
@@ -12,7 +12,7 @@ const SLIDES = [
 
 const STATS = [
   { value: 'Grade 8–12', label: 'Secondary School' },
-  { value: '3',           label: 'Academic Streams' },
+  { value: '542',         label: 'Learners' },
   { value: 'NSC',         label: 'National Senior Certificate' },
   { value: 'Public',      label: 'Public School' },
 ]

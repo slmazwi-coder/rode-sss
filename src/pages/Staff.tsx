@@ -1,31 +1,13 @@
 import React from 'react';
-import { User } from 'lucide-react';
+import { User, Phone } from 'lucide-react';
+import { STAFF } from '../lib/store';
 
-const staffData = [
-  { name: 'Principal', position: 'Principal', category: 'Leadership' },
-  { name: 'Deputy Principal', position: 'Deputy Principal', category: 'Leadership' },
-  { name: 'HOD — General Stream', position: 'Head of Department', subject: 'General Stream', category: 'Leadership' },
-  { name: 'HOD — Science Stream', position: 'Head of Department', subject: 'Science Stream', category: 'Leadership' },
-  { name: 'HOD — Commerce Stream', position: 'Head of Department', subject: 'Commerce Stream', category: 'Leadership' },
+type Member = { name: string; position: string; subject?: string };
 
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 8A', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 8B', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 9A', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 9B', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 10A', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 10B', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 11A', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 11B', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 12A', category: 'Class Teachers' },
-  { name: 'Class Teacher', position: 'Class Teacher — Grade 12B', category: 'Class Teachers' },
+const CATEGORIES = ['Leadership', 'Class Teachers', 'Educators', 'Support Staff'] as const;
+type Category = typeof CATEGORIES[number];
 
-  { name: 'School Administrator', position: 'School Administrator', category: 'Support Staff' },
-  { name: 'Security Officer', position: 'Security Officer', category: 'Support Staff' },
-];
-
-const categories = ['Leadership', 'Class Teachers', 'Support Staff'];
-
-const StaffCard = ({ member }: { member: typeof staffData[number] }) => (
+const StaffCard = ({ member }: { member: Member }) => (
   <div
     className="rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col items-center p-6 text-center hover:-translate-y-1"
     style={{ background: '#FFF8E1', border: '1px solid #DAA520' }}
@@ -55,8 +37,35 @@ const StaffCard = ({ member }: { member: typeof staffData[number] }) => (
 );
 
 export const Staff = () => {
-  const [activeCategory, setActiveCategory] = React.useState('Leadership');
-  const filtered = staffData.filter(m => m.category === activeCategory);
+  const [activeCategory, setActiveCategory] = React.useState<Category>('Leadership');
+
+  const leadership: Member[] = STAFF.leadership.map(({ name, role }) => ({
+    name,
+    position: role,
+  }));
+
+  const classTeachers: Member[] = STAFF.classTeachers.map(({ className, teacher }) => ({
+    name: teacher,
+    position: `Class Teacher — Grade ${className}`,
+  }));
+
+  const educators: Member[] = STAFF.educators.map(({ name }) => ({
+    name,
+    position: 'Educator',
+  }));
+
+  const support: Member[] = STAFF.support.flatMap(({ group, members }) =>
+    members.map(({ name }) => ({ name, position: group })),
+  );
+
+  const byCategory: Record<Category, Member[]> = {
+    'Leadership':     leadership,
+    'Class Teachers': classTeachers,
+    'Educators':      educators,
+    'Support Staff':  support,
+  };
+
+  const filtered = byCategory[activeCategory];
 
   return (
     <div className="min-h-screen py-12 px-4" style={{ background: '#EBF5FF' }}>
@@ -73,7 +82,7 @@ export const Staff = () => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {categories.map(cat => (
+          {CATEGORIES.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -89,17 +98,50 @@ export const Staff = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {filtered.map((member, i) => (
-            <StaffCard key={i} member={member} />
-          ))}
-        </div>
+        {/* Leadership shows direct contact numbers; other groups are name/role only */}
+        {activeCategory === 'Leadership' ? (
+          <div className="max-w-3xl mx-auto space-y-4">
+            {STAFF.leadership.map(({ name, role, cell }) => (
+              <div
+                key={role}
+                className="rounded-2xl px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+                style={{ background: '#FFF8E1', border: '1px solid #DAA520' }}
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: '#EBF5FF', border: '3px solid #DAA520' }}
+                  >
+                    <User size={26} style={{ color: '#DAA520', opacity: 0.6 }} />
+                  </div>
+                  <div>
+                    <p className="font-bold" style={{ color: '#1E3A5F' }}>{name}</p>
+                    <p className="text-sm text-gray-500">{role}</p>
+                  </div>
+                </div>
+                <a
+                  href={`tel:${cell.replace(/\s/g, '')}`}
+                  className="inline-flex items-center gap-2 text-sm font-semibold shrink-0"
+                  style={{ color: '#1E3A5F' }}
+                >
+                  <Phone size={15} /> {cell}
+                </a>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {filtered.map((member, i) => (
+              <StaffCard key={`${member.name}-${i}`} member={member} />
+            ))}
+          </div>
+        )}
 
         <div className="mt-12 text-center">
           <div className="card max-w-2xl mx-auto" style={{ borderTop: '4px solid #DAA520' }}>
             <p className="text-sm" style={{ color: '#4b5563' }}>
-              Staff names and photos will be updated as information is provided by the school.
-              Contact us at <strong>078 640 3623</strong> for enquiries.
+              Staff photos will be added as they are provided by the school.
+              Contact the office on <strong>071 019 9439</strong> for enquiries.
             </p>
           </div>
         </div>

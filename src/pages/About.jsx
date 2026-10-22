@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAbout } from '../lib/store'
+import { getAbout, SCHOOL } from '../lib/store'
 
 export default function About() {
   const [data, setData] = useState(null)
@@ -36,13 +36,16 @@ export default function About() {
             <h3 className="font-display font-bold text-xl mb-6" style={{ color: '#FFFFFF' }}>School at a Glance</h3>
             <dl className="space-y-4">
               {[
+                ['EMIS No.',    SCHOOL.emis],
                 ['Phase',       'Secondary (Grades 8–12)'],
                 ['Sector',      'Public School'],
                 ['Province',    'Eastern Cape'],
-                ['Streams',     'General, Science, Commerce'],
-                ['Address',     'Rode, Eastern Cape, South Africa'],
-                ['Phone',       '078 640 3623'],
-                ['Email',       'coming soon'],
+                ['Enrolment',   `${SCHOOL.enrolment} learners`],
+                ['Streams',     'Science, Commerce, Humanities'],
+                ['Address',     SCHOOL.address],
+                ['Postal',      SCHOOL.postal],
+                ['Phone',       SCHOOL.phone],
+                ['Email',       SCHOOL.email],
                 ['School Hours','Mon–Thu 07:30–15:30 · Fri 07:30–13:30'],
               ].map(([label, value]) => (
                 <div key={label} className="flex flex-col sm:flex-row sm:gap-4">

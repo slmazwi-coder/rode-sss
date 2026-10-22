@@ -307,11 +307,11 @@ export const Admissions = () => {
               <div>
                 <h2 className="text-2xl font-bold">Application for Admission to School</h2>
                 <p className="text-white/70 text-sm mt-1">
-                  Rode Senior Secondary School &nbsp;·&nbsp; Rode, Eastern Cape, South Africa
+                  Rode Senior Secondary School &nbsp;·&nbsp; Ward 11, Rode A/A, Mount Ayliff, 5087
                 </p>
               </div>
               <div className="text-right text-sm text-white/70">
-                <div>Tel: 078 640 3623</div>
+                <div>Tel: 071 019 9439</div>
                 <div>Step {step} of 3</div>
               </div>
             </div>

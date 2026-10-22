@@ -5,12 +5,16 @@ import { getApplications } from '../lib/store'
 const SYSTEM = `You are a helpful, warm assistant for Rode Senior Secondary School in the Eastern Cape, South Africa.
 
 School facts:
-- Phone: 078 640 3623
+- Phone: 071 019 9439
 - Email: coming soon
-- Address: Rode, Eastern Cape, South Africa
-- Grades 8–12, public school
+- Physical address: Ward 11, Rode A/A, Mount Ayliff, 5087
+- Postal address: P.O. Box 06 (Ward 11), Rode, 5087
+- EMIS number: 20050107
+- 542 learners, Grades 8–12 (GET 8–9, FET 10–12), public school
 - Motto: Rise and Shine (Where Dreams Take Flight)
-- Three streams: General (Languages, Tourism, History, Geography, Maths Literacy, L.O), Science (Languages, L.O, Maths, Physics, Life Sciences, Geo/Agriculture), Commerce (Languages, L.O, Accounting, Business Studies, Economics, Maths/Maths Lit)
+- Three streams: Science (Physical Sciences, Agricultural Sciences, Life Sciences, Mathematics, Geographical Sciences), Commerce (Accounting, Economics, Business Studies, Tourism, Maths/Maths Literacy), Humanities (History, Geography, Economics, Tourism, Mathematical Literacy)
+- Acting Principal: Mr. N. Mayeza
+- Matric pass rates: 2023 94.5%, 2024 98.2%, 2025 95.2%
 - 2027 admission applications currently open
 - School hours: Mon–Thu 07:30–15:30, Fri 07:30–13:30
 - Sports: Soccer, Netball, Athletics
@@ -84,7 +88,7 @@ export default function ChatbotWidget() {
       const reply = await askClaude(text)
       addMsg('bot', reply)
     } catch {
-      addMsg('bot', 'I\'m having trouble connecting right now. Please contact the school directly at 078 640 3623.')
+      addMsg('bot', 'I\'m having trouble connecting right now. Please contact the school directly at 071 019 9439.')
     } finally {
       setBusy(false)
     }
